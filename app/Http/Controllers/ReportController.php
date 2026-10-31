@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Report;
-use app\Models\Area;
+use App\Models\Area;
 use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
@@ -28,8 +28,8 @@ class ReportController extends Controller
      */
     public function create()
     {
-        $areas = area::all();
-        return view('report.create', compact('areas'));
+        $areas = Area::all();
+        return view('reports.create', compact('areas'));
     }
 
     /**

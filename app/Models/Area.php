@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Area extends Model
 {
-    //
+    public function reports()
+{
+    return $this->hasMany(Report::class);
+}
 }
