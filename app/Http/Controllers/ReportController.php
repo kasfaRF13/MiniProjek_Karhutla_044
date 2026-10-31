@@ -14,15 +14,13 @@ class ReportController extends Controller
      */
     public function index()
     {
-        $reports = Report::with('area', 'user')->get();//mengambil data laporan beserta relasi area dan user
+        // Mengambil data laporan beserta relasi area dan user, diurutkan dari yang terbaru
+        $reports = Report::with('area', 'user')->latest()->get();
 
-        //return json sementara untuk memastikan datanya masuk
-        return response()->json([
-            'success' => true,
-            'data' => $reports
-        ]);
+        // Mengarahkan ke file view index.blade.php
+        return view('reports.index', compact('reports'));
     }
-
+    
     /**
      * menampilkan form buat laporan 
      */
@@ -32,6 +30,9 @@ class ReportController extends Controller
         return view('reports.create', compact('areas'));
     }
 
+    /**
+     * menyimpan laporan ke database
+     */
     /**
      * menyimpan laporan ke database
      */
@@ -55,9 +56,10 @@ class ReportController extends Controller
             $filePath = $request->file('evidence_file')->store('evidence_reports', 'public');
         }
 
-        //simpan data ke database
+        // Simpan data ke database
         Report::create([
-            'user_id'=> Auth::id(),
+            // Gunakan Auth::id() jika sudah login, atau fallback ke ID 1 untuk testing sementara
+            'user_id' => Auth::id() ?? 1, 
             'area_id' => $request->area_id,
             'location_detail' => $request->location_detail,
             'latitude' => $request->latitude,
@@ -68,6 +70,9 @@ class ReportController extends Controller
             'evidence_file' => $filePath,
             'status' => 'menunggu', // Status awal laporan
         ]);
+
+       
+        return redirect()->back()->with('success', 'Laporan kebakaran berhasil dikirim!');
     }
 
     /**

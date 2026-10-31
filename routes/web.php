@@ -8,10 +8,10 @@ Route::get('/', function () {
 });
 
 // route untuk melihat daftar laporan 
-Route::get('/reports', [ReportController::class, 'index']);
+Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
-//rout untuk menampilkan form laporan
-Route::get('/reports/create', [ReportController::class, 'create']);
+// route untuk menampilkan form laporan (tambahkan .name di sini)
+Route::get('/reports/create', [ReportController::class, 'create'])->name('reports.create');
 
-//route unruk memproses penyimpanan data laporan baru 
+// route untuk memproses penyimpanan data laporan baru 
 Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
