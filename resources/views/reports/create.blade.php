@@ -50,6 +50,46 @@
                                 </select>
                             </div>
 
+                            <div id="area-info-container" class="mb-3"></div>
+
+                            @section('scripts')
+                            <script>
+                                document.getElementById('area_id').addEventListener('change', function() {
+                                    let areaId = this.value;
+                                    let container = document.getElementById('area-info-container');
+
+                                    if (!areaId) {
+                                        container.innerHTML = '';
+                                        return;
+                                    }
+
+                                    // Melakukan request asynchronous dengan fetch()
+                                    fetch(`/api/area-reports/${areaId}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                if (data.total_active > 0) {
+                                                    container.innerHTML = `
+                                                        <div class="alert alert-warning">
+                                                            <strong>Perhatian:</strong> Terdapat <strong>${data.total_active} laporan aktif</strong> di wilayah ini yang belum selesai ditangani. Pastikan lokasi laporan tidak duplikat.
+                                                        </div>
+                                                    `;
+                                                } else {
+                                                    container.innerHTML = `
+                                                        <div class="alert alert-success">
+                                                            <strong>Aman:</strong> Belum ada laporan aktif di wilayah ini.
+                                                        </div>
+                                                    `;
+                                                }
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Terjadi kesalahan:', error);
+                                        });
+                                });
+                            </script>
+                            @endsection
+
                             <!-- Detail Lokasi -->
                             <div class="mb-3">
                                 <label for="location_detail" class="form-label">Detail Lokasi / Patokan</label>
@@ -92,8 +132,11 @@
 
                             <!-- Upload Bukti Foto -->
                             <div class="mb-3">
-                                <label for="evidence_file" class="form-label">Bukti Foto (Opsional)</label>
-                                <input type="file" name="evidence_file" id="evidence_file" class="form-control" accept="image/png,image/jpeg,image/jpg">
+                                <label for="evidence_file" class="form-label">Bukti Pendukung (JPG, PNG, atau PDF - Maks. 2MB)</label>
+                                <input type="file" class="form-control @error('evidence_file') is-invalid @enderror" id="evidence_file" name="evidence_file" accept=".jpg,.jpeg,.png,.pdf">
+                                @error('evidence_file')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <!-- Tombol Kirim -->

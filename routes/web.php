@@ -23,4 +23,6 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/reports/{id}', [ReportController::class, 'update'])->name('reports.update');
     });
 
+    Route::get('/api/area-reports/{areaId}', [ReportController::class, 'getAreaReports'])->middleware('auth');
+
 });

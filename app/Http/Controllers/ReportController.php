@@ -38,43 +38,37 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi input dari form pelapor
         $request->validate([
             'area_id' => 'required|exists:areas,id',
             'location_detail' => 'required|string|max:255',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
-            'incident_time' => 'required|date',
             'condition_level' => 'required|string',
-            'description' => 'required|string',
-            'evidence_file' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // opsional upload foto bukti
+            'incident_time' => 'required|date',
+            // Validasi file sesuai ketentuan dokumen (maksimal 2MB, format gambar/pdf)[cite: 6]
+            'evidence_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
         $filePath = null;
-        // Jika ada file bukti yang di-upload
         if ($request->hasFile('evidence_file')) {
-            $filePath = $request->file('evidence_file')->store('evidence_reports', 'public');
+            // Menyimpan file ke folder storage/app/public/evidences
+            $filePath = $request->file('evidence_file')->store('evidences', 'public');
         }
 
-        // Simpan data ke database
         Report::create([
-            // Gunakan Auth::id() jika sudah login, atau fallback ke ID 1 untuk testing sementara
-            'user_id' => Auth::id() ?? 1, 
+            'user_id' => auth()->id(),
             'area_id' => $request->area_id,
             'location_detail' => $request->location_detail,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
-            'incident_time' => $request->incident_time,
             'condition_level' => $request->condition_level,
-            'description' => $request->description,
+            'incident_time' => $request->incident_time,
             'evidence_file' => $filePath,
-            'status' => 'menunggu', // Status awal laporan
+            'status' => 'menunggu', // Status awal sesuai dokumen[cite: 3]
         ]);
 
-       
-        return redirect()->back()->with('success', 'Laporan kebakaran berhasil dikirim!');
+        return redirect()->route('reports.index')->with('success', 'Laporan berhasil dibuat!');
     }
-
     /**
      * menampilkan detail lengkap suatu laporan
      */
@@ -119,4 +113,18 @@ class ReportController extends Controller
     {
         //
     }
+
+    public function getAreaReports($areaId)
+{
+    // Mengambil laporan aktif (yang belum selesai/ditolak) pada area tersebut
+    $activeReports = \App\Models\Report::where('area_id', $areaId)
+        ->whereNotIn('status', ['selesai', 'ditolak'])
+        ->get();
+
+    return response()->json([
+        'success' => true,
+        'total_active' => $activeReports->count(),
+        'reports' => $activeReports
+    ]);
+}
 }
