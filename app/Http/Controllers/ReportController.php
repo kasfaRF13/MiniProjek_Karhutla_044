@@ -20,7 +20,7 @@ class ReportController extends Controller
         // Mengarahkan ke file view index.blade.php
         return view('reports.index', compact('reports'));
     }
-    
+
     /**
      * menampilkan form buat laporan 
      */
@@ -76,11 +76,12 @@ class ReportController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * menampilkan detail lengkap suatu laporan
      */
     public function show(string $id)
     {
-        //
+        $report = Report::with('area', 'user')->findOrFail($id);
+        return view('reports.show', compact('report'));
     }
 
     /**
@@ -92,11 +93,23 @@ class ReportController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Mengupdate status laporan oleh relawan/petugas
      */
     public function update(Request $request, string $id)
     {
-        //
+        $report = Report::findOrFail($id);
+
+        $request->validate([
+            'status' => 'required|in:menunggu,diproses,selesai,ditolak',
+            'volunteer_notes' => 'nullable|string|max:500',
+        ]);
+
+        $report->update([
+            'status' => $request->status,
+            'volunteer_notes' => $request->volunteer_notes,
+        ]);
+
+        return redirect()->route('reports.show', $id)->with('success', 'Status laporan berhasil diperbarui!');
     }
 
     /**

@@ -15,3 +15,6 @@ Route::get('/reports/create', [ReportController::class, 'create'])->name('report
 
 // route untuk memproses penyimpanan data laporan baru 
 Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
+
+Route::get('/reports/{id}', [ReportController::class, 'show'])->name('reports.show');
+Route::put('/reports/{id}', [ReportController::class, 'update'])->name('reports.update');
