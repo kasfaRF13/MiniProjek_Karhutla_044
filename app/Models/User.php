@@ -34,4 +34,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Report::class);
     }
+
+    public function hasRole($role)
+    {
+        return $this->role === $role;
+    }
 }

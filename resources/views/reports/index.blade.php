@@ -12,7 +12,15 @@
     <div class="container my-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>Daftar Laporan Kebakaran Hutan & Lahan</h2>
-            <a href="{{ route('reports.create') }}" class="btn btn-primary">+ Buat Laporan Baru</a>
+            <div class="d-flex gap-2">
+                <a href="{{ route('reports.recap') }}" class="btn btn-primary mb-3">Lihat Halaman Rekapitulasi</a>
+                <a href="{{ route('reports.create') }}" class="btn btn-primary">+ Buat Laporan Baru</a>
+                <!-- Tombol Logout -->
+                <form action="{{ route('logout') }}" method="POST" class="m-0">
+                    @csrf
+                    <button type="submit" class="btn btn-outline-danger">Logout</button>
+                </form>
+            </div>
         </div>
 
         @if(session('success'))
@@ -20,6 +28,8 @@
                 {{ session('success') }}
             </div>
         @endif
+
+        
 
         <div class="card shadow-sm">
             <div class="card-body">
@@ -67,7 +77,7 @@
                                     <td colspan="8" class="text-center text-muted">Belum ada data laporan kebakaran yang masuk.</td>
                                 </tr>
                             @endforelse
-                        </tbody>
+                        </tbody>    
                     </table>
                 </div>
             </div>

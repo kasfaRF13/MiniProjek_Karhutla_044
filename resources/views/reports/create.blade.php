@@ -13,9 +13,17 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-danger text-white">
+                    <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
                         <h4 class="mb-0">Form Pelaporan Titik Api / Karhutla</h4>
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('reports.my-reports') }}" class="btn btn-sm btn-light">Lihat Laporan Saya</a>
+                            <form action="{{ route('logout') }}" method="POST" class="m-0">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-outline-light">Logout</button>
+                            </form>
+                        </div>
                     </div>
+
                     <div class="card-body">
                         
                         <!-- Notifikasi jika sukses -->
@@ -52,7 +60,6 @@
 
                             <div id="area-info-container" class="mb-3"></div>
 
-                            @section('scripts')
                             <script>
                                 document.getElementById('area_id').addEventListener('change', function() {
                                     let areaId = this.value;
@@ -88,7 +95,6 @@
                                         });
                                 });
                             </script>
-                            @endsection
 
                             <!-- Detail Lokasi -->
                             <div class="mb-3">
