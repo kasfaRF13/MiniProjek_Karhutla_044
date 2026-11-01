@@ -10,29 +10,34 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // Akun Pelapor
-        User::create([
-            'name' => 'Warga Pelapor',
-            'email' => 'pelapor@karhutla.test',
-            'password' => Hash::make('password123'),
-            'role' => 'pelapor',
-        ]);
+        // 1. Akun Pelapor (Masyarakat)
+       User::firstOrCreate(
+            ['email' => 'pelapor@karhutla.test'],
+            [
+                'name' => 'Warga Pelapor',
+                'password' => Hash::make('password123'),
+                'role' => 'pelapor',
+            ]
+        );
+        
+        // 2. Akun Relawan Pemantau
+        User::firstOrCreate(
+            ['email' => 'relawan@karhutla.test'],
+            [
+                'name' => 'Budi Relawan',
+                'password' => Hash::make('password123'),
+                'role' => 'relawan',
+            ]
+        );
 
-        // Akun Relawan
-        User::create([
-            'name' => 'Tim Relawan Lapangan',
-            'email' => 'relawan@karhutla.test',
-            'password' => Hash::make('password123'),
-            'role' => 'relawan',
-        ]);
-
-        // Akun Koordinator
-        User::create([
-            'name' => 'Koordinator Pusat',
-            'email' => 'koordinator@karhutla.test',
-            'password' => Hash::make('password123'),
-            'role' => 'koordinator',
-        ]);
+        // 3. Akun Koordinator Relawan
+        User::firstOrCreate(
+            ['email' => 'koordinator@karhutla.test'],
+            [
+                'name' => 'Andi Koordinator',
+                'password' => Hash::make('password123'),
+                'role' => 'koordinator',
+            ]
+        );
     }
 }
-

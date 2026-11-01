@@ -87,10 +87,11 @@
                             <div class="mb-3">
                                 <label for="status" class="form-label">Ubah Status Laporan</label>
                                 <select name="status" id="status" class="form-select" required>
-                                    <option value="menunggu" {{ $report->status == 'menunggu' ? 'selected' : '' }}>Menunggu Verifikasi</option>
-                                    <option value="diproses" {{ $report->status == 'diproses' ? 'selected' : '' }}>Diproses / Ditangani Tim</option>
-                                    <option value="selesai" {{ $report->status == 'selesai' ? 'selected' : '' }}>Selesai / Padam</option>
-                                    <option value="ditolak" {{ $report->status == 'ditolak' ? 'selected' : '' }}>Ditolak (Laporan Palsu)</option>
+                                    <option value="menunggu" {{ $report->status == 'menunggu' ? 'selected' : '' }}>Menunggu</option>
+                                    <option value="ditinjau" {{ $report->status == 'ditinjau' ? 'selected' : '' }}>Ditinjau (Relawan Pemantau)</option>
+                                    <option value="diteruskan" {{ $report->status == 'diteruskan' ? 'selected' : '' }}>Diteruskan (Koordinator Relawan)</option>
+                                    <option value="selesai" {{ $report->status == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                                    <option value="ditolak" {{ $report->status == 'ditolak' ? 'selected' : '' }}>Ditolak</option>
                                 </select>
                             </div>
 

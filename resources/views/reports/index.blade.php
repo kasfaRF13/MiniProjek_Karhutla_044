@@ -49,27 +49,24 @@
                                     </td>
                                     <td>{{ $report->incident_time }}</td>
                                     <td>
-                                        <span class="badge bg-secondary">{{ ucfirst($report->status) }}</span>
+                                        <span class="badge 
+                                            @if($report->status == 'menunggu') bg-secondary 
+                                            @elseif($report->status == 'ditinjau') bg-info text-dark 
+                                            @elseif($report->status == 'diteruskan') bg-warning text-dark 
+                                            @elseif($report->status == 'selesai') bg-success 
+                                            @else bg-danger @endif">
+                                            {{ ucfirst($report->status) }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('reports.show', $report->id) }}" class="btn btn-sm btn-info text-white">Detail</a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="text-center text-muted">Belum ada data laporan kebakaran yang masuk.</td>
+                                    <td colspan="8" class="text-center text-muted">Belum ada data laporan kebakaran yang masuk.</td>
                                 </tr>
                             @endforelse
-
-                            <td>
-                                <span class="badge 
-                                    @if($report->status == 'menunggu') bg-secondary 
-                                    @elseif($report->status == 'diproses') bg-warning text-dark 
-                                    @elseif($report->status == 'selesai') bg-success 
-                                    @else bg-danger @endif">
-                                    {{ ucfirst($report->status) }}
-                                </span>
-                            </td>
-                            <td>
-                                <a href="{{ route('reports.show', $report->id) }}" class="btn btn-sm btn-info text-white">Detail</a>
-                            </td>
                         </tbody>
                     </table>
                 </div>

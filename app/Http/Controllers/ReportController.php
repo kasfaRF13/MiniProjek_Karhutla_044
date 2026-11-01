@@ -100,7 +100,7 @@ class ReportController extends Controller
         $report = Report::findOrFail($id);
 
         $request->validate([
-            'status' => 'required|in:menunggu,diproses,selesai,ditolak',
+            'status' => 'required|in:menunggu,ditinjau,diteruskan,selesai,ditolak',
             'volunteer_notes' => 'nullable|string|max:500',
         ]);
 

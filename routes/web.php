@@ -7,14 +7,20 @@ Route::get('/', function () {
     return view('welcome'); 
 });
 
-// route untuk melihat daftar laporan 
-Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+// Rute yang membutuhkan autentikasi login
+Route::middleware(['auth'])->group(function () {
 
-// route untuk menampilkan form laporan (tambahkan .name di sini)
-Route::get('/reports/create', [ReportController::class, 'create'])->name('reports.create');
+    // 1. Hak Akses Pelapor: Membuat dan mengirim laporan baru
+    Route::middleware(['role:pelapor'])->group(function () {
+        Route::get('/reports/create', [ReportController::class, 'create'])->name('reports.create');
+        Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
+    });
 
-// route untuk memproses penyimpanan data laporan baru 
-Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
+    // 2. Hak Akses Relawan Pemantau & Koordinator Relawan: Melihat daftar, detail, dan update status
+    Route::middleware(['role:relawan,koordinator'])->group(function () {
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports/{id}', [ReportController::class, 'show'])->name('reports.show');
+        Route::put('/reports/{id}', [ReportController::class, 'update'])->name('reports.update');
+    });
 
-Route::get('/reports/{id}', [ReportController::class, 'show'])->name('reports.show');
-Route::put('/reports/{id}', [ReportController::class, 'update'])->name('reports.update');
+});
